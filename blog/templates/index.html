@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% load static %}
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo App</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+  </head>
+  <body>
+    <h1 class="main-title">Todo List</h1>
+
+    <form method="post" action="{% url 'index' %}" class="todo-form">
+      {% csrf_token %}
+      <input type="hidden" name="update_id" id="update_id" value="" />
+      <input
+        type="text"
+        class="todo-input"
+        name="title"
+        required
+        placeholder="Mavzu"
+      />
+      <textarea
+        id="description"
+        class="textarea"
+        name="description"
+        placeholder="Tavsif"
+        required
+      ></textarea>
+      <button type="submit" name="action" class="todo-btn" value="add">
+        Qo'shish
+      </button>
+    </form>
+
+    <div class="todo-list">
+      {% for todo in todos %}
+      <div
+        class="{% if todo.completed %}completed-task{% else %}todo-item{% endif %}"
+      >
+        <b>{{ todo.title }}</b>
+        {% if todo.description %}
+        <p>{{ todo.description }}</p>
+        {% endif %}
+        <div class="btns-wrapper">
+          <form
+            method="post"
+            action="{% url 'delete_todo' todo.pk %}"
+          >
+            {% csrf_token %}
+            <button type="submit" class="delete-btn">O'chirish</button>
+          </form>
+          <a href="{% url 'update_todo' todo.pk %}">
+            <button
+              class="{% if todo.completed %}none-btn{% else %}edit-btn{% endif %}"
+            >
+              Tahrirlash
+            </button>
+          </a>
+          <form
+            method="post"
+            action="{% url 'complete_todo' todo.pk %}"
+          >
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="{% if todo.completed %}none-btn{% else %}complete-btn{% endif %}"
+            >
+              {% if todo.completed %}Tamomlangan{% else %}Bajarildi deb
+              belgilash{% endif %}
+            </button>
+          </form>
+        </div>
+      </div>
+      {% empty %}
+      <p class="no-todo">Hali hech qanday vazifalar yo'q 😁</p>
+      {% endfor %}
+    </div>
+  </body>
+</html>

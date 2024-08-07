@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update Todo</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+  </head>
+  <body>
+    <h1>Tahrirlash: {{ todo.title }}</h1>
+    <form method="post" class="todo-form">
+      {% csrf_token %}
+      <input
+        type="text"
+        class="todo-input"
+        name="title"
+        required
+        value="{{ todo.title }}"
+      />
+      <textarea
+        id="description"
+        class="textarea"
+        name="description"
+        placeholder="{{ todo.description }}"
+      ></textarea>
+      <button class="todo-btn" type="submit">Tahrirlash</button>
+    </form>
+    <a class="no-todo" href="{% url 'index' %}">Asosiy sahifaga qaytish 👈</a>
+  </body>
+</html>
